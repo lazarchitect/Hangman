@@ -1,13 +1,13 @@
 #hangman.py in tkinter
-from tkinter import *
-import urllib.request as req
+from tkinter import * #for GUI tools
+import urllib.request as req #for API access
 
 def window_die():# pretty simple, it exists so the button can be changed to this command after the game ends.
-	root.destroy()
+	root.destroy() #closes window
 
 def definitionButton():
 	import webbrowser
-	webbrowser.open("http://dictionary.reference.com/browse/"+gay+"?s=t")
+	webbrowser.open("http://dictionary.reference.com/browse/"+formatted_word+"?s=t")
 	
 def replaceAll(letter,theWord):	#replace all characters in UnScWord at indices of the given letter with the letter.
 	for qw in range(len(theWord)):
@@ -78,19 +78,19 @@ PhotoImage(file = "(6)Dead.png")
 ]
 try:
 	API_Read = str(req.urlopen("http://randomword.setgetgo.com/get.php").read()) #get a random word from the API
-	gay = API_Read[2:len(API_Read)-5] #format it
-	totes = "" 
-	for letz in gay: #add spaces in between the letters
-		totes+=letz+" "
-	word = totes.lower()
+	formatted_word = API_Read[2:len(API_Read)-5] #format it
+	final_word = "" 
+	for letter in formatted_word: #add spaces in between the letters
+		final_word+=letter+" "
+	word = final_word.lower()
 except:
 	words = ["courtyard", "lamppost", "establishment", "fumigate", "accumulate", "larynx", "particle", "bagpipe", "jugular", "aluminum","pentecostal"]
 	from random import choice
-	gay = choice(words)
-	totes = "" 
-	for letz in gay: #add spaces in between the letters
-		totes+=letz+" "
-	word = totes.lower()
+	formatted_word = choice(words)
+	final_word = "" 
+	for letter in formatted_word: #add spaces in between the letters
+		final_word+=letter+" "
+	word = final_word.lower()
 
 ##################################################
 #window elements
