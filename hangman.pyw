@@ -77,7 +77,7 @@ PhotoImage(file = "(5)1 leg.png"),
 PhotoImage(file = "(6)Dead.png")
 ]
 try:
-	API_Read = str(req.urlopen("http://randomword.setgetgo.com/get.php").read()) #get a random word from the API
+	API_Read = str(req.urlopen("http://setgetgo.com/randomword/get.php").read()) #get a random word from the API
 	formatted_word = API_Read[2:len(API_Read)-5] #format it
 	final_word = "" 
 	for letter in formatted_word: #add spaces in between the letters
