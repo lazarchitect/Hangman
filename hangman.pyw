@@ -2,9 +2,14 @@
 from tkinter import * #for GUI tools
 import urllib.request as req #for API access
 
+####SOME NOTES:
+#"UnScWord" refers to the UnderScore Word, the puzzle that is presented to the player.
+#As the Player succeeds, more letters are revealed to them, but initially, all they see is underscores.
+
 def window_die():# pretty simple, it exists so the button can be changed to this command after the game ends.
 	root.destroy() #closes window
 
+#The command behind the button at the end which fetches the definition of a word.
 def definitionButton():
 	import webbrowser
 	webbrowser.open("http://dictionary.reference.com/browse/"+formatted_word+"?s=t")
@@ -18,7 +23,7 @@ def callback(event):#for key presses
 	update()
 	
 def update():#what happens when you press the button.
-	global tries
+	global tries #the number of attempts the user has made so far.
 	global UnScWord
 	guess = UserInput.get().lower()
 
@@ -60,13 +65,16 @@ def update():#what happens when you press the button.
 root = Tk()
 root.bind("<Return>", callback)
 
-tries = 0
+tries = 0 #the number of attempts the user has made so far.
 
-AG = StringVar()
-AG.set("")
+AG = StringVar() #AG stands for Already Guessed, keeping track of the user's previous moves.
+AG.set("") #Initially empty, obviously
 
+#the congratulatory image that appears when you win
 winnerpic = PhotoImage(file = "(10)Winner.png")
 
+#A series of horrific, gory stick figure lynchings. Each one contains more and more body parts. Barbaric.
+#Updated to be more complete each time the user enters an incorrect letter.
 imglist = [
 PhotoImage(file = "(0)Nothing.png"), 
 PhotoImage(file = "(1)Head.png"),
@@ -78,12 +86,14 @@ PhotoImage(file = "(6)Dead.png")
 ]
 try:
 	API_Read = str(req.urlopen("http://setgetgo.com/randomword/get.php").read()) #get a random word from the API
-	formatted_word = API_Read[2:len(API_Read)-5] #format it
+	formatted_word = API_Read.decode("utf-8") #format it
 	final_word = "" 
 	for letter in formatted_word: #add spaces in between the letters
 		final_word+=letter+" "
 	word = final_word.lower()
-except:
+except: 
+	#This bloc will trigger if the API call failed or returned some bizarrely unworkable value.
+	#A word will be chosen randomly from this preset list.
 	words = ["courtyard", "lamppost", "establishment", "fumigate", "accumulate", "larynx", "particle", "bagpipe", "jugular", "aluminum","pentecostal"]
 	from random import choice
 	formatted_word = choice(words)
@@ -98,16 +108,17 @@ root.title("Hangman")
 
 
 pic = Label(root, image=imglist[tries])#the picture
-pic.grid(row=0,column=0,rowspan=2)
+pic.grid(row=0,column=0,rowspan=2) #These "grid" function calls insert elements into the GUI at specific row-column cells.
+				   #rowspan refers to an element being able to take up a longer width.
  
 UserInput = StringVar()
 textfield = Entry(root, textvariable=UserInput, width=len(UserInput.get()))#the textfield
-textfield.focus_set()
+textfield.focus_set() #So the user can tart typing into it and guessing right away
 textfield.grid(row=2, column=0)
 
 # Label(root, text="Word: ").grid(row=0, column=1)
 
-UnScWord = StringVar()
+UnScWord = StringVar() #the creation of the underscore word.
 for eachLetter in range(int(len(word)/2)):
 	UnScWord.set(UnScWord.get()+"_ ")
 Label(root, textvariable = UnScWord, font = (40)).grid(row=1, column=1)#the word in underscores. guessing correctly should reveal it.
